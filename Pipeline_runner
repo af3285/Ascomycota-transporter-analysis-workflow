@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Checks for argument
+if [ -z "$1" ]; then
+  echo "Usage: $0 <fasta_file>"
+  exit 1
+fi
+
+fasta="$1"
+
+blastp -query "$fasta" \
+       -db nr \
+       -remote \
+       -entrez_query "Ascomycota[Organism]" \
+       -evalue 1e-5 \
+       -outfmt 5 \
+       -out blast_output.xml
+
+python3 AnalysisCode_configurable.py blast_output.xml     --pdb 6uwf.pdb     --output-dir results
